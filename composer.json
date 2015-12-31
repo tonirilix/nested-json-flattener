@@ -1,0 +1,17 @@
+{
+    "name": "tonirilix/cvswriter",
+    "description": "A package to create cvs files from nested json objects",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "tonirilix",
+            "email": "jesusmontes.mx@hotmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "src\\": "Cvswriter/"
+        }
+    },
+    "require": {}
+}
