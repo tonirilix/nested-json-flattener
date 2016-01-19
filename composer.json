@@ -1,6 +1,7 @@
 {
     "name": "tonirilix/csvwriter",
     "description": "A package to create cvs files from nested json objects",
+    "keywords": ["json", "nested json", "convert json to csv", "csv", "csv writer"],
     "license": "MIT",
     "authors": [
         {
