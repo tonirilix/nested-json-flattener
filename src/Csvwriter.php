@@ -26,6 +26,9 @@
 
 namespace Csvwriter;
 
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
+
 /**
  * Cvswriter allows you to transform nested json data into a flat csv
  *
@@ -36,9 +39,9 @@ class Csvwriter {
     private $_data;
     private $_options;
 
-    public function __construct(array $data = array(), array $options = array()) {
-        $this->_data = $data;
-        $this->_options = $options;
+    public function __construct() {
+        $this->_data = [];
+        $this->_options = [];
     }
 
     public function setJsonData($json = '{}') {
@@ -46,33 +49,34 @@ class Csvwriter {
     }
 
     public function setArrayData($array = []) {
-        $this->_data = (object) $array;
+        $this->_data = $this->_arrayToObject($array);
     }
 
-    public function setOptions($options) {
+    public function setOptions($options = []) {
         $this->_options = $options;
     }
 
-    public function getFlatData(array $data = array(), $options = array()) {
-        // Setting data
-        $_data = !empty($data) ? $data : $this->_data;
-        // Setting options
-        $_options = !empty($options) ? $options : $this->_options;
-
-        // Flats passed array of data
-        $result = $this->flatten($_data, [], $_options);
+    public function getFlatData() {
+        
+        $result = [];
+        
+        if(!is_array($this->_data)){
+            $this->_data = [$this->_data];
+        }
+        
+        foreach ($this->_data as $data) {
+            // Flats passed array of data
+            $result[] = $this->flatten($data, [], $this->_options);
+        }               
 
         // Returns
         return $result;
     }
 
-    public function writeCsv($data = array(), $name = '', $options = array()) {
+    public function writeCsv($name = '') {
         $_name = !empty($name) ? $name : "file_" . rand();
         // Setting data
-        $_data = !empty($data) ? $data : $this->_data;
-        // Setting options
-        $_options = !empty($options) ? $options : $this->_options;
-
+        $_data = $this->getFlatData();        
 
         $csvFormat = $this->_arrayToCsv($_data);
         $this->_writeCsv($csvFormat, $_name);
@@ -101,7 +105,7 @@ class Csvwriter {
 
     private function _normalizeKeys($param) {
         $keys = array();
-        foreach (new \RecursiveIteratorIterator(new \RecursiveArrayIterator($param)) as $key => $val) {
+        foreach (new RecursiveIteratorIterator(new RecursiveArrayIterator($param)) as $key => $val) {
             $keys[$key] = '';
         }
 
@@ -111,6 +115,23 @@ class Csvwriter {
         }
 
         return $data;
+    }    
+
+    private function _arrayToObject(array $arr) {
+        $flat = array_keys($arr) === range(0, count($arr) - 1);
+        $out = $flat ? [] : new \stdClass();
+
+        foreach ($arr as $key => $value) {
+            $temp = is_array($value) ? $this->_arrayToObject($value) : $value;
+
+            if ($flat) {
+                $out[] = $temp;
+            } else {
+                $out->{$key} = $temp;
+            }
+        }
+
+        return $out;
     }
 
     /**
@@ -162,11 +183,35 @@ class Csvwriter {
 
     private function flatArray($data, array $path = array(), array $options = array()) {
         $result = array();
-        foreach ($data as $key => $value) {
-            $currentPath = array_merge($path, array($key));
-            $flat = $this->flatten($value, $currentPath, $options);
+        /**
+         * if (params.arrayDelimiter && data.length > 0 && typeof data[0] !== 'object' && !(data[0] instanceof Array)) {
+          flatten(data.join(params.arrayDelimiter), columns, params, path, row);
+          } else {
+          var i;
+          for (i = 0; i < data.length; i++) {
+          flatten(data[i], columns, params, path.concat(i), row);
+          }
+          }
+         */
+        if (count($data) > 0 && !is_object($data[0]) && !is_array($data[0])) {
+            $flat = $this->flatten(join(",", $data), $path, $options);
             $result = array_merge($result, $flat);
+        } else {
+            foreach ($data as $key => $value) {                
+                $currentPath = array_merge($path, array($key));
+                $flat = $this->flatten($value, $currentPath, $options);
+                $result = array_merge($result, $flat);                               
+            }
         }
+        
+        /**
+         * foreach ($data as $key => $value) {
+                $currentPath = array_merge($path, array($key));
+                $flat = $this->flatten($value, $currentPath, $options);
+                $result = array_merge($result, $flat);
+            }
+         */
+
         return $result;
     }
 
