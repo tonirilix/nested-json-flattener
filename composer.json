@@ -1,5 +1,5 @@
 {
-    "name": "tonirilix/cvswriter",
+    "name": "tonirilix/csvwriter",
     "description": "A package to create cvs files from nested json objects",
     "license": "MIT",
     "authors": [
