@@ -27,86 +27,156 @@
 namespace Csvwriter;
 
 /**
- * Description of Cvswriter
+ * Cvswriter allows you to transform nested json data into a flat csv
  *
  * @author tonirilix
  */
 class Csvwriter {
 
-    private $_columns;
-    private $_rows;
-    private $_params;
     private $_data;
-    private $_cb;
+    private $_options;
 
-    public function __construct($data, $params, $cb) {
-        $this->_columns = [];
-        $this->_rows = [];
-        $this->_params = $params;
+    public function __construct(array $data = array(), array $options = array()) {
         $this->_data = $data;
-        $this->_cb = $cb;
-
-
-        if (is_callable($this->_params)) {
-            $this->_cb = $this->_params;
-            $this->_params = null;
-        }
-
-        if (!is_array($this->_data)) {
-            $this->_data = [$this->_data];
-        }
-
-        foreach ($this->_data as $k => $d) {
-            $this->_rows[] = $this->flatten($d, $k, $this->_columns, $this->_params);
-        }
-
-        $fields = $this->_params['fields'];
-        $this->_columns = isset($fields) ? explode(",", $fields) : $this->_columns;
+        $this->_options = $options;
     }
 
-    public function flatten($data, $key, $columns, $params, $path = [], $row = null) {
-        $maxDepth = $params['maxDepth'];
-        if ($params['maxDepth'] >= 0 && count($path) > ($maxDepth + 1)) {
-            return $row;
-        }
-
-        if (is_array($data) && count($data)) {
-            $this->flattenArray($data, $columns, $params, $path, $row);
-        } else if (is_object($data)) {
-            $this->flattenObject($data, $columns, $params, $path, $row);
-        } else {
-            $path[] = $key;
-            $this->addField($data, $columns, $params, $path, $row);
-        }
-
-        return $row;
+    public function setJsonData($json = '{}') {
+        $this->_data = json_decode($json);
     }
 
-    private function flattenArray($data, $columns, $params, $path, $row) {
-        
-//        if (params.arrayDelimiter && data.length > 0 && typeof data[0] !== 'object' && !(data[0] instanceof Array)) {
-//        flatten(data.join(params.arrayDelimiter), columns, params, path, row);
-//    } else {
-//        var i;
-//        for (i = 0; i < data.length; i++) {
-//            flatten(data[i], columns, params, path.concat(i), row);
+    public function setArrayData($array = []) {
+        $this->_data = (object) $array;
+    }
+
+    public function setOptions($options) {
+        $this->_options = $options;
+    }
+
+    public function getFlatData(array $data = array(), $options = array()) {
+        // Setting data
+        $_data = !empty($data) ? $data : $this->_data;
+        // Setting options
+        $_options = !empty($options) ? $options : $this->_options;
+
+        // Flats passed array of data
+        $result = $this->flatten($_data, [], $_options);
+
+        // Returns
+        return $result;
+    }
+
+    public function writeCsv($data = array(), $name = '', $options = array()) {
+        $_name = !empty($name) ? $name : "file_" . rand();
+        // Setting data
+        $_data = !empty($data) ? $data : $this->_data;
+        // Setting options
+        $_options = !empty($options) ? $options : $this->_options;
+
+
+        $csvFormat = $this->_arrayToCsv($_data);
+        $this->_writeCsv($csvFormat, $_name);
+    }
+
+    private function _arrayToCsv($data) {
+
+        $dataNormalized = $this->_normalizeKeys($data);
+
+        $rows[0] = array_keys($dataNormalized[0]);
+
+        foreach ($dataNormalized as $value) {
+            //$rows[0] = array_keys($value);
+            $rows[] = array_values($value);
+        }
+        return $rows;
+    }
+
+    private function _writeCsv($data, $name) {
+        $fp = fopen($name . '.csv', 'w');
+        foreach ($data as $line) {
+            fputcsv($fp, $line, ',');
+        }
+        fclose($fp);
+    }
+
+    private function _normalizeKeys($param) {
+        $keys = array();
+        foreach (new \RecursiveIteratorIterator(new \RecursiveArrayIterator($param)) as $key => $val) {
+            $keys[$key] = '';
+        }
+
+        $data = array();
+        foreach ($param as $values) {
+            $data[] = array_merge($keys, $values);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Flats a nested array
+     * @param array $data Array with data to be flattened
+     * @param array $path Options param, it's used by the recursive method to set the full key name
+     * @param array $options Not implemented yet
+     * @return array Flattened array
+     */
+    private function flatten($data, array $path = array(), array $options = array()) {
+        $result = array();
+//        foreach ($data as $key => $val) {
+//            $currentPath = array_merge($path, array($key));
+//            if (is_array($val)) {
+//                $result = array_merge($result, $this->flatten($val, $currentPath, $options));
+//            } else {
+//                $pathName = join('.', $currentPath);
+//                $result[$pathName] = $val;
+//            }
 //        }
-//    }
-        $i = 0;
-        for ($i = 0; $i < count($data); $i++) {            
+
+        if (is_object($data)) {
+            $flat = $this->flatObject($data, $path, $options);
+            $result = array_merge($result, $flat);
+        } elseif (is_array($data)) {
+            $flat = $this->flatArray($data, $path, $options);
+            $result = array_merge($result, $flat);
+        } else {
+            $flat = $this->addValue($data, $path, $options);
+            $result = array_merge($result, $flat);
         }
+
+        return $result;
     }
 
-    private function flattenObject($data, $columns, $params, $path, $row) {
-        
+    private function flatObject($data, array $path = array(), array $options = array()) {
+
+        $result = array();
+
+        $data = get_object_vars($data);
+        foreach ($data as $key => $value) {
+            $currentPath = array_merge($path, array($key));
+            $flat = $this->flatten($value, $currentPath, $options);
+            $result = array_merge($result, $flat);
+        }
+
+        return $result;
     }
 
-    private function addField($data, &$columns, $params, $path, &$row) {
-        $field = implode(".", $path);
-        $row[$field] = $data;
-        if (!isset($columns['field'])) {
-            $columns[] = $field;
+    private function flatArray($data, array $path = array(), array $options = array()) {
+        $result = array();
+        foreach ($data as $key => $value) {
+            $currentPath = array_merge($path, array($key));
+            $flat = $this->flatten($value, $currentPath, $options);
+            $result = array_merge($result, $flat);
         }
+        return $result;
+    }
+
+    private function addValue($data, array $path = array(), array $options = array()) {
+        $result = array();
+
+        $pathName = join('.', $path);
+        $result[$pathName] = $data;
+
+        return $result;
     }
 
 }
