@@ -1,6 +1,7 @@
 # Csvwriter
 A php package to create cvs files from nested json objects, json files and nested arrays.
-It's based on https://www.npmjs.com/package/csvwriter
+
+It's based on [csvwriter](https://www.npmjs.com/package/csvwriter) npm package implementation.
 
 ## How to use it
 **If you need to flat a nested json string**
