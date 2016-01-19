@@ -27,14 +27,15 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use Csvwriter\Csvwriter;
-$dataJson = '{"name":"antonio","repo":{"type":"git","url":"XD"},"collection":[{"key":"comment", "value": 55}, {"key":"comment", "value": 44}, {"key":"comment", "value": 77}]}';
-$data = json_decode($dataJson);
-//$data = ['name' => 'antonio', 'repo' => ['type'=>'git', 'url'=>'XD']];
+
+$dataJson = '{"name":"javascript","repo":{"type":"git","url":"XD"},"collection":[{"key":"comment", "value": 55}, {"key":"comment", "value": 44}, {"key":"comment", "value": 77}]}';
+$data = ['name' => 'scala', 'repo' => ['type'=>'git', 'url'=>'XD'], "collectionPrimitives"=>[1234,2134,55]];
 
 $params = ['fields'=>'name, nick'];
-
+print_r($datas);
 $csvWriter = new Csvwriter();
-$csvWriter->setJsonData($dataJson);
-//$csvWriter->setArrayData($data);
+//$csvWriter->setJsonData($dataJson);
+$csvWriter->setArrayData($data);
 $flat = $csvWriter->getFlatData();
 print_r($flat);
+$csvWriter->writeCsv();
