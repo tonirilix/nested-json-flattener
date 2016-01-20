@@ -15,5 +15,7 @@
         }
     },
     "minimum-stability": "stable",
-    "require": {}
+    "require": {
+        "peekmo/jsonpath": "dev-master"
+    }
 }
