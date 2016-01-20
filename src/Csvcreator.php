@@ -26,8 +26,11 @@
 
 namespace NestedJsonToCsv;
 
+use Exception;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
+use stdClass;
+use Peekmo\JsonPath\JsonStore;
 
 /**
  * Cvswriter allows you to transform nested json data into a flat csv
@@ -41,35 +44,54 @@ class Csvcreator {
      * @var type 
      */
     private $_data;
-    
+
     /**
      * TODO: This is going to be the configuration. WIP
      * @var type 
      */
     private $_options;
-    
+
     /**
      * A simple constructor
      */
-    public function __construct() {
+    public function __construct($options = []) {
         $this->_data = [];
-        $this->_options = [];
+        $this->_options = $options;
     }
-    
+
     /**
      * Sets a json passed as string
      * @param string $json
      */
     public function setJsonData($json = '{}') {
-        $this->_data = json_decode($json);
+
+        $selectedNode = json_decode($json, true);
+        $selectedNode = $this->_getPath($selectedNode);
+        $this->_data = $this->_arrayToObject($selectedNode);
     }
-    
+
     /**
      * Sets a simple array
      * @param array $array
      */
     public function setArrayData(array $array = []) {
-        $this->_data = $this->_arrayToObject($array);
+
+        $selectedNode = $array;
+
+        $selectedNode = $this->_getPath($selectedNode);
+
+        $this->_data = $this->_arrayToObject($selectedNode);
+    }
+
+    private function _getPath($data) {
+        $selectedNode = $data;
+        if (!empty($this->_options) && isset($this->_options['path'])) {
+            $store = new JsonStore($data);
+            $path = $this->_options['path'];
+            // Returns an array with all categories from books which have an isbn attribute
+            $selectedNode = $store->get($path);
+        }
+        return $selectedNode;
     }
 
     /**
@@ -77,28 +99,30 @@ class Csvcreator {
      * @param array $options
      */
     public function setOptions(array $options = []) {
-        $this->_options = $options;
+
+        throw new Exception('Please, set options in constructor. This is method is not yet implemented');
+        //$this->_options = $options;
     }
-    
+
     /**
      * Resturns a flatted array
      * @return array
      */
     public function getFlatData() {
-        
+
         $result = [];
-        
+
         // Checks wether data is an array or not
-        if(!is_array($this->_data)){
+        if (!is_array($this->_data)) {
             // If it's not we convert it to array
             $this->_data = [$this->_data];
         }
-            
+
         // Loops the array 
         foreach ($this->_data as $data) {
             // Flats passed array of data
             $result[] = $this->flatten($data, [], $this->_options);
-        }               
+        }
 
         // Returns
         return $result;
@@ -111,13 +135,12 @@ class Csvcreator {
     public function writeCsv($name = '') {
         $_name = !empty($name) ? $name : "file_" . rand();
         // Setting data
-        $_data = $this->getFlatData();        
+        $_data = $this->getFlatData();
 
         $csvFormat = $this->_arrayToCsv($_data);
         $this->_writeCsv($csvFormat, $_name);
     }
-    
-    
+
     private function _arrayToCsv($data) {
 
         $dataNormalized = $this->_normalizeKeys($data);
@@ -151,8 +174,8 @@ class Csvcreator {
         }
 
         return $data;
-    }    
-    
+    }
+
     /**
      * This function works as same as json_decode(json_encode($arr), false). 
      * It was taken from http://stackoverflow.com/a/31652810/3442878
@@ -161,7 +184,7 @@ class Csvcreator {
      */
     private function _arrayToObject(array $arr) {
         $flat = array_keys($arr) === range(0, count($arr) - 1);
-        $out = $flat ? [] : new \stdClass();
+        $out = $flat ? [] : new stdClass();
 
         foreach ($arr as $key => $value) {
             $temp = is_array($value) ? $this->_arrayToObject($value) : $value;
@@ -216,17 +239,17 @@ class Csvcreator {
 
     private function flatArray($data, array $path = array(), array $options = array()) {
         $result = array();
-        
+
         if (count($data) > 0 && !is_object($data[0]) && !is_array($data[0])) {
             $flat = $this->flatten(join(",", $data), $path, $options);
             $result = array_merge($result, $flat);
         } else {
-            foreach ($data as $key => $value) {                
+            foreach ($data as $key => $value) {
                 $currentPath = array_merge($path, array($key));
                 $flat = $this->flatten($value, $currentPath, $options);
-                $result = array_merge($result, $flat);                               
+                $result = array_merge($result, $flat);
             }
-        }               
+        }
 
         return $result;
     }

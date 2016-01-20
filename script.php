@@ -41,13 +41,13 @@ $dataJson = '{
 		"primitivesCollection": [123, 456, 789]
 	}
 }';
-//$dataJson = json_decode($dataJson);
-//$dataJson = json_encode($dataJson);
-$data = ['name' => 'scala', 'repo' => ['type'=>'git', 'url'=>'XD'], "collectionPrimitives"=>[1234,2134,55]];
-$params = ['fields'=>'name, nick'];
 
-$csvWriter = new Csvcreator();
+$data = ['name' => 'scala', 'repo' => ['type'=>'git', 'url'=>'XD'], "collectionPrimitives"=>[1234,2134,55]];
+$options = ['path'=>'$.nested'];
+
+$csvWriter = new Csvcreator($options);
 $csvWriter->setJsonData($dataJson);
+//$csvWriter->setOptions();
 //$csvWriter->setArrayData($data);
 $flat = $csvWriter->getFlatData();
 print_r($flat);
