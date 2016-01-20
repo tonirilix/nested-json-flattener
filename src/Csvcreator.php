@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-namespace Csvwriter;
+namespace NestedJsonToCsv;
 
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
@@ -34,7 +34,7 @@ use RecursiveIteratorIterator;
  *
  * @author tonirilix
  */
-class Csvwriter {
+class Csvcreator {
 
     /**
      * Stores the data converted to object wether was passed as object or json string
