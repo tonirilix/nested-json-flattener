@@ -13,8 +13,8 @@
         "psr-4": {
             "NestedJsonToCsv\\": "src/"
         }
-    },    
-    "require": {
-        "peekmo/jsonpath": "v2.0-ALPHA"
+    },
+    "require-dev": {
+        "peekmo/jsonpath": "dev-master"
     }
 }
