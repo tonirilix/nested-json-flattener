@@ -1,2 +1,6 @@
+# Project folders
 /vendor/
 /nbproject/
+
+# Generated files
+composer.lock
