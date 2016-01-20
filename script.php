@@ -26,14 +26,14 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Csvwriter\Csvwriter;
+use NestedJsonToCsv\Csvcreator;
 
 $dataJson = '{"name":"javascript","repo":{"type":"git","url":"XD"},"collection":[{"key":"comment", "value": 55}, {"key":"comment", "value": 44}, {"key":"comment", "value": 77}]}';
 $data = ['name' => 'scala', 'repo' => ['type'=>'git', 'url'=>'XD'], "collectionPrimitives"=>[1234,2134,55]];
 
 $params = ['fields'=>'name, nick'];
 print_r($datas);
-$csvWriter = new Csvwriter();
+$csvWriter = new Csvcreator();
 //$csvWriter->setJsonData($dataJson);
 $csvWriter->setArrayData($data);
 $flat = $csvWriter->getFlatData();
