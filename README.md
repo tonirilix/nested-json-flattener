@@ -34,8 +34,19 @@ It's based on [csvwriter](https://www.npmjs.com/package/csvwriter) npm package i
 **If you need to flat a nested json string**
 
 ```
-use NestedJsonToCsv/Csvcreator;
-$dataJson = '{"name":"javascript","repo":{"type":"git","url":"XD"},"collection":[{"key":"comment", "value": 55}, {"key":"comment", "value": 44}, {"key":"comment", "value": 77}]}';
+use NestedJsonToCsv\Csvcreator;
+$dataJson = '{
+	"name": "This is a name",
+	"nested": {
+		"type": "This is a type",
+		"location": "Earth",
+		"geo": {
+			"latitude": "1234567890",
+			"longitude": "0987654321"
+		},
+		"primitivesCollection":[123, 456, 789]
+	}	
+}';
 
 $csvWriter = new Csvcreator();
 $csvWriter->setJsonData($dataJson);
@@ -47,26 +58,75 @@ print_r($flat);
 **If you need to flat a nested array**
 
 ```
-use NestedJsonToCsv/Csvcreator;
-$data = ['name' => 'scala', 'repo' => ['type'=>'git', 'url'=>'XD']];
+use NestedJsonToCsv\Csvcreator;
+$data = [
+	'name' => 'This is a name', 
+	'nested' => [
+		'type' => 'This is a type',
+		'location' => 'Earth',
+		'geo' => [
+			'latitude'=> '1234567890',
+			'longitude'=> '0987654321'
+		],
+		'primitivesCollection'=> [123, 456, 789]
+	]
+];
 
 $csvWriter = new Csvcreator();
 $csvWriter->setArrayData($data);
 $flat = $csvWriter->getFlatData();
 print_r($flat);
 ```
+**If you need to select a specific path to be flattened**
+
+Read [JsonPath](http://goessner.net/articles/JsonPath/) documentation from Stefan Goessner to learn how to create paths.
+
+```
+use NestedJsonToCsv\Csvcreator;
+$data = [
+	'name' => 'This is a name', 
+	'nested' => [
+		'type' => 'This is a type',
+		'location' => 'Earth',
+		'geo' => [
+			'latitude'=> '1234567890',
+			'longitude'=> '0987654321'
+		],
+		'primitivesCollection'=> [123, 456, 789]
+	]
+];
+// This is a path based on JsonPath implementation
+$options = ['path'=>'$.nested'];
+
+$csvWriter = new Csvcreator($options);
+$csvWriter->setArrayData($data);
+$flat = $csvWriter->getFlatData();
+print_r($flat);
+```
+
 **If you need to write a csv file**
 
 ```
-use NestedJsonToCsv/Csvcreator;
-$data = ['name' => 'typescript', 'repo' => ['type'=>'git', 'url'=>'XD']];
-
+use NestedJsonToCsv\Csvcreator;
+$data = [
+	'name' => 'This is a name', 
+	'nested' => [
+		'type' => 'This is a type',
+		'location' => 'Earth',
+		'geo' => [
+			'latitude'=> '1234567890',
+			'longitude'=> '0987654321'
+		],
+		'primitivesCollection'=> [123, 456, 789]
+	]
+];
 $csvWriter = new Csvcreator();
+$csvWriter->setArrayData($data);
 $csvWriter->writeCsv();
 
 ```
 ## TODO
 1. The package still needs to get configurations from params. 
-2. Some of the params thought are: path to specific element in nested object, wether take primitives arrays as one or not (taken as one element by default)
+2. Some of the params thought are: whether take primitives arrays as one element or not (taken as one element by default)
 3. Some methods need to be splitted into different files.
 4. Add a way to create a configuration to tell the class how to handle internal collections. 
