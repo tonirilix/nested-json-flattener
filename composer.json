@@ -16,6 +16,6 @@
     },
     "minimum-stability": "stable",
     "require": {
-        "peekmo/jsonpath": "dev-master"
+        "peekmo/jsonpath": "v2.0-ALPHA"
     }
 }
