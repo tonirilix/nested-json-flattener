@@ -2,7 +2,7 @@
 A php package to create cvs files from nested json objects, json files and nested arrays.
 
 ## Features
-1. The package allows you to select a specific node of the json object or array and flat it. The selected node can be flattened wether is a object or collection.
+1. The package allows you to select a specific node of the json object or array and flat it. The selected node can be flattened whether is a object or collection.
 
 2. It takes in count the full path where a value is stored in a nested json object and uses it as header name. Let's use the example below.
 
