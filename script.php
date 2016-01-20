@@ -29,13 +29,26 @@ require __DIR__ . '/vendor/autoload.php';
 use NestedJsonToCsv\Csvcreator;
 
 $dataJson = '{"name":"javascript","repo":{"type":"git","url":"XD"},"collection":[{"key":"comment", "value": 55}, {"key":"comment", "value": 44}, {"key":"comment", "value": 77}]}';
+$dataJson = '{
+	"name": "This is a name",
+	"nested": {
+		"type": "This is a type",
+		"location": "Earth",
+		"geo": {
+			"latitude": "1234567890",
+			"longitude": "0987654321"
+		},
+		"primitivesCollection": [123, 456, 789]
+	}
+}';
+//$dataJson = json_decode($dataJson);
+//$dataJson = json_encode($dataJson);
 $data = ['name' => 'scala', 'repo' => ['type'=>'git', 'url'=>'XD'], "collectionPrimitives"=>[1234,2134,55]];
-
 $params = ['fields'=>'name, nick'];
-print_r($datas);
+
 $csvWriter = new Csvcreator();
-//$csvWriter->setJsonData($dataJson);
-$csvWriter->setArrayData($data);
+$csvWriter->setJsonData($dataJson);
+//$csvWriter->setArrayData($data);
 $flat = $csvWriter->getFlatData();
 print_r($flat);
 $csvWriter->writeCsv();
