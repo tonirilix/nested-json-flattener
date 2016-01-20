@@ -127,6 +127,6 @@ $csvWriter->writeCsv();
 ```
 ## TODO
 1. The package still needs to get configurations from params. 
-2. Some of the params thought are: whether take primitives arrays as one element or not (taken as one element by default)
+2. Some of the params in mind are: whether take primitives arrays as one element or not (taken as one element by default)
 3. Some methods need to be splitted into different files.
 4. Add a way to create a configuration to tell the class how to handle internal collections. 
