@@ -1,5 +1,7 @@
 # NestedJsonFlattener
-[![Code Climate](https://codeclimate.com/github/tonirilix/nested-json-flattener/badges/gpa.svg)](https://codeclimate.com/github/tonirilix/nested-json-flattener)
+
+
+[![Code Climate](https://codeclimate.com/github/tonirilix/nested-json-flattener/badges/gpa.svg)](https://codeclimate.com/github/tonirilix/nested-json-flattener) [![Latest Stable Version](https://poser.pugx.org/tonirilix/nested-json-flattener/v/stable)](https://packagist.org/packages/tonirilix/nested-json-flattener) [![Total Downloads](https://poser.pugx.org/tonirilix/nested-json-flattener/downloads)](https://packagist.org/packages/tonirilix/nested-json-flattener) [![Latest Unstable Version](https://poser.pugx.org/tonirilix/nested-json-flattener/v/unstable)](https://packagist.org/packages/tonirilix/nested-json-flattener) [![License](https://poser.pugx.org/tonirilix/nested-json-flattener/license)](https://packagist.org/packages/tonirilix/nested-json-flattener)
 
 A php package to flatten nested json objects and nested arrays. It also allows you to create csv files from the flattened data.
 
@@ -50,9 +52,9 @@ $dataJson = '{
 	}	
 }';
 
-$csvWriter = new Flattener();
-$csvWriter->setJsonData($dataJson);
-$flat = $csvWriter->getFlatData();
+$flattener = new Flattener();
+$flattener->setJsonData($dataJson);
+$flat = $flattener->getFlatData();
 print_r($flat);
 ```
 
@@ -74,9 +76,9 @@ $data = [
 	]
 ];
 
-$csvWriter = new Flattener();
-$csvWriter->setArrayData($data);
-$flat = $csvWriter->getFlatData();
+$flattener = new Flattener();
+$flattener->setArrayData($data);
+$flat = $flattener->getFlatData();
 print_r($flat);
 ```
 **If you need to select a specific path to be flattened**
@@ -100,9 +102,9 @@ $data = [
 // This is a path based on JsonPath implementation
 $options = ['path'=>'$.nested'];
 
-$csvWriter = new Flattener($options);
-$csvWriter->setArrayData($data);
-$flat = $csvWriter->getFlatData();
+$flattener = new Flattener($options);
+$flattener->setArrayData($data);
+$flat = $flattener->getFlatData();
 print_r($flat);
 ```
 
@@ -122,13 +124,12 @@ $data = [
 		'primitivesCollection'=> [123, 456, 789]
 	]
 ];
-$csvWriter = new Flattener();
-$csvWriter->setArrayData($data);
-$csvWriter->writeCsv();
+$flattener = new Flattener();
+$flattener->setArrayData($data);
+$flattener->writeCsv();
 
 ```
 ## TODO
 1. The package still needs to get configurations from params. 
 2. Some of the params in mind are: whether take primitives arrays as one element or not (taken as one element by default)
-3. Some methods need to be splitted into different files.
-4. Add a way to create a configuration to tell the class how to handle internal collections. 
+3. Add a way to create a configuration to tell the class how to handle internal collections. 
