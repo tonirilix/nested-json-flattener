@@ -44,7 +44,7 @@ $dataJson = '{
 }';
 
 $data = ['name' => 'scala', 'repo' => ['type'=>'git', 'url'=>'XD'], "collectionPrimitives"=>[1234,2134,55]];
-$options = ['path'=>'$.nested'];
+$options = ['path_'=>'$.nested'];
 
 $csvWriter = new Csvcreator($options);
 $csvWriter->setJsonData($dataJson);
@@ -52,4 +52,4 @@ $csvWriter->setJsonData($dataJson);
 //$csvWriter->setArrayData($data);
 $flat = $csvWriter->getFlatData();
 print_r($flat);
-$csvWriter->writeCsv();
+//$csvWriter->writeCsv();
