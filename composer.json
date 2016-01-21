@@ -1,5 +1,5 @@
 {
-    "name": "tonirilix/nested-json-to-csv",
+    "name": "tonirilix/nested-json-flattener",
     "description": "A package to create cvs files from nested json objects",
     "keywords": ["json", "nested json", "convert json to csv", "csv", "csv writer"],
     "license": "MIT",
@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "NestedJsonToCsv\\": "src/"
+            "NestedJsonFlattener\\": "src/"
         }
     },
     "require-dev": {
