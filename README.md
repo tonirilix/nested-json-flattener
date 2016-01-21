@@ -1,4 +1,6 @@
 # NestedJsonFlattener
+[![Code Climate](https://codeclimate.com/github/tonirilix/nested-json-flattener/badges/gpa.svg)](https://codeclimate.com/github/tonirilix/nested-json-flattener)
+
 A php package to flatten nested json objects and nested arrays. It also allows you to create csv files from the flattened data.
 
 ## Features
