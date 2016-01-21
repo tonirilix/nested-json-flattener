@@ -1,4 +1,4 @@
-# NestedJsonToCsv
+# NestedJsonFlattener
 A php package to create cvs files from nested json objects, json files and nested arrays.
 
 ## Features
@@ -34,7 +34,7 @@ It's based on [csvwriter](https://www.npmjs.com/package/csvwriter) npm package i
 **If you need to flat a nested json string**
 
 ```
-use NestedJsonToCsv\Csvcreator;
+use NestedJsonFlattener\Csvcreator;
 $dataJson = '{
 	"name": "This is a name",
 	"nested": {
@@ -58,7 +58,7 @@ print_r($flat);
 **If you need to flat a nested array**
 
 ```
-use NestedJsonToCsv\Csvcreator;
+use NestedJsonFlattener\Csvcreator;
 $data = [
 	'name' => 'This is a name', 
 	'nested' => [
@@ -82,7 +82,7 @@ print_r($flat);
 Read [JsonPath](http://goessner.net/articles/JsonPath/) documentation from Stefan Goessner to learn how to create paths.
 
 ```
-use NestedJsonToCsv\Csvcreator;
+use NestedJsonFlattener\Csvcreator;
 $data = [
 	'name' => 'This is a name', 
 	'nested' => [
@@ -107,7 +107,7 @@ print_r($flat);
 **If you need to write a csv file**
 
 ```
-use NestedJsonToCsv\Csvcreator;
+use NestedJsonFlattener\Csvcreator;
 $data = [
 	'name' => 'This is a name', 
 	'nested' => [
