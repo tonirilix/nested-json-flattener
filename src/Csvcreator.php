@@ -207,48 +207,53 @@ class Csvcreator {
      * @return array Flattened array
      */
     private function flatten($data, array $path = array(), array $options = array()) {
-        $result = array();
 
+        // Check if the data is an object        
         if (is_object($data)) {
-            $flat = $this->flatObject($data, $path, $options);
-            $result = array_merge($result, $flat);
+
+            $flatObject = $this->flatObject($data, $path, $options);
+            return $flatObject;
+
+            // Check if the data is an array
         } elseif (is_array($data)) {
-            $flat = $this->flatArray($data, $path, $options);
-            $result = array_merge($result, $flat);
-        } else {
-            $flat = $this->addValue($data, $path, $options);
-            $result = array_merge($result, $flat);
+
+            $flatArray = $this->flatArray($data, $path, $options);
+            return $flatArray;
         }
 
-        return $result;
+        // If the data isn't an object or an array is a value
+        $flatValue = $this->addValue($data, $path, $options);
+        return $flatValue;
     }
 
     private function flatObject($data, array $path = array(), array $options = array()) {
 
-        $result = array();
 
         $data_ = get_object_vars($data);
-        foreach ($data_ as $key => $value) {
-            $currentPath = array_merge($path, array($key));
-            $flat = $this->flatten($value, $currentPath, $options);
-            $result = array_merge($result, $flat);
-        }
 
-        return $result;
+        $flatArrayHelper = $this->flatArrayHelper($data_, $path, $options);
+        return $flatArrayHelper;
     }
 
     private function flatArray($data, array $path = array(), array $options = array()) {
-        $result = array();
 
         if (count($data) > 0 && !is_object($data[0]) && !is_array($data[0])) {
-            $flat = $this->flatten(join(",", $data), $path, $options);
+            $flatPrimitives = $this->flatten(join(",", $data), $path, $options);
+            return $flatPrimitives;
+        }
+
+
+        $flatArrayHelper = $this->flatArrayHelper($data, $path, $options);
+        return $flatArrayHelper;
+    }
+
+    private function flatArrayHelper($data, $path, $options) {
+        $result = array();
+
+        foreach ($data as $key => $value) {
+            $currentPath = array_merge($path, array($key));
+            $flat = $this->flatten($value, $currentPath, $options);
             $result = array_merge($result, $flat);
-        } else {
-            foreach ($data as $key => $value) {
-                $currentPath = array_merge($path, array($key));
-                $flat = $this->flatten($value, $currentPath, $options);
-                $result = array_merge($result, $flat);
-            }
         }
 
         return $result;
