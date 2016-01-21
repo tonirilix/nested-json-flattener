@@ -27,7 +27,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 
-use NestedJsonToCsv\Csvcreator;
+use NestedJsonFlattener\Csvcreator;
 
 $dataJson = '{"name":"javascript","repo":{"type":"git","url":"XD"},"collection":[{"key":"comment", "value": 55}, {"key":"comment", "value": 44}, {"key":"comment", "value": 77}]}';
 $dataJson = '{
