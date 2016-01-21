@@ -27,7 +27,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 
-use NestedJsonFlattener\Csvcreator;
+use NestedJsonFlattener\Flattener\Flattener;
 
 $dataJson = '{"name":"javascript","repo":{"type":"git","url":"XD"},"collection":[{"key":"comment", "value": 55}, {"key":"comment", "value": 44}, {"key":"comment", "value": 77}]}';
 $dataJson = '{
@@ -46,10 +46,10 @@ $dataJson = '{
 $data = ['name' => 'scala', 'repo' => ['type'=>'git', 'url'=>'XD'], "collectionPrimitives"=>[1234,2134,55]];
 $options = ['path_'=>'$.nested'];
 
-$csvWriter = new Csvcreator($options);
-$csvWriter->setJsonData($dataJson);
+$csvWriter = new Flattener($options);
+$csvWriter->setJsonData($dataJson); 
 //$csvWriter->setOptions();
 //$csvWriter->setArrayData($data);
 $flat = $csvWriter->getFlatData();
 print_r($flat);
-//$csvWriter->writeCsv();
+$csvWriter->writeCsv();
