@@ -24,85 +24,22 @@
  * THE SOFTWARE.
  */
 
-namespace NestedJsonFlattener;
+namespace NestedJsonFlattener\Flattener;
 
-use Exception;
-use RecursiveArrayIterator;
-use RecursiveIteratorIterator;
-use stdClass;
-use Peekmo\JsonPath\JsonStore;
 
 /**
  * Cvswriter allows you to transform nested json data into a flat csv
  *
  * @author tonirilix
  */
-class Csvcreator {
-
-    /**
-     * Stores the data converted to object wether was passed as object or json string
-     * @var type 
-     */
-    private $data;
-
-    /**
-     * TODO: This is going to be the configuration. WIP
-     * @var type 
-     */
-    private $options;
+class Flattener extends FlattenerBase{    
 
     /**
      * A simple constructor
      */
     public function __construct($options = []) {
-        $this->data = [];
-        $this->options = $options;
-    }
-
-    /**
-     * Sets a json passed as string
-     * @param string $json
-     */
-    public function setJsonData($json = '{}') {
-
-        $selectedNode = json_decode($json, true);
-        $selectedNode = $this->getPath($selectedNode);
-        $this->data = $this->arrayToObject($selectedNode);
-    }
-
-    /**
-     * Sets a simple array
-     * @param array $array
-     */
-    public function setArrayData(array $array = []) {
-
-        $selectedNode = $array;
-
-        $selectedNode = $this->getPath($selectedNode);
-
-        $this->data = $this->arrayToObject($selectedNode);
-    }
-
-    private function getPath($data) {
-        $selectedNode = $data;
-        if (!empty($this->options) && isset($this->options['path'])) {
-            $store = new JsonStore($data);
-            $path = $this->options['path'];
-            // Returns an array with all categories from books which have an isbn attribute
-            $selectedNode = $store->get($path);
-        }
-        return $selectedNode;
-    }
-
-    /**
-     * TODO: Sets options that are going to be used as configuration. WIP
-     * @param array $options
-     */
-    public function setOptions(array $options = []) {
-
-        throw new Exception('Please, set options in constructor. This is method is not yet implemented');
-        //$this->_options = $options;
-    }
+        parent::__construct($options);
+    }            
 
     /**
      * Resturns a flatted array
@@ -113,13 +50,14 @@ class Csvcreator {
         $result = [];
 
         // Checks wether data is an array or not
-        if (!is_array($this->data)) {
+        if (!is_array($this->getData())) {
             // If it's not we convert it to array
-            $this->data = [$this->data];
+            $data0 = [$this->getData()];
+            $this->setData($data0);
         }
 
         // Loops the array 
-        foreach ($this->data as $data) {
+        foreach ($this->getData() as $data) {
             // Flats passed array of data
             $result[] = $this->flatten($data, []);
         }
@@ -137,66 +75,7 @@ class Csvcreator {
         // Setting data
         $dataFlattened = $this->getFlatData();
 
-        $csvFormat = $this->arrayToCsv($dataFlattened);
-        $this->writeCsvToFile($csvFormat, $fileName);
-    }
-
-    private function arrayToCsv($data) {
-
-        $dataNormalized = $this->normalizeKeys($data);
-
-        $rows[0] = array_keys($dataNormalized[0]);
-
-        foreach ($dataNormalized as $value) {
-            //$rows[0] = array_keys($value);
-            $rows[] = array_values($value);
-        }
-        return $rows;
-    }
-
-    private function writeCsvToFile($data, $name) {
-        $file = fopen($name . '.csv', 'w');
-        foreach ($data as $line) {
-            fputcsv($file, $line, ',');
-        }
-        fclose($file);
-    }
-
-    private function normalizeKeys($param) {
-        $keys = array();
-        foreach (new RecursiveIteratorIterator(new RecursiveArrayIterator($param)) as $key => $val) {
-            $keys[$key] = '';
-        }
-
-        $data = array();
-        foreach ($param as $values) {
-            $data[] = array_merge($keys, $values);
-        }
-
-        return $data;
-    }
-
-    /**
-     * This function works as same as json_decode(json_encode($arr), false). 
-     * It was taken from http://stackoverflow.com/a/31652810/3442878
-     * @param array $arr
-     * @return object
-     */
-    private function arrayToObject(array $arr) {
-        $flat = array_keys($arr) === range(0, count($arr) - 1);
-        $out = $flat ? [] : new stdClass();
-
-        foreach ($arr as $key => $value) {
-            $temp = is_array($value) ? $this->arrayToObject($value) : $value;
-
-            if ($flat) {
-                $out[] = $temp;
-            } else {
-                $out->{$key} = $temp;
-            }
-        }
-
-        return $out;
+        $this->getCsvWriter()->writeCsv($fileName, $dataFlattened);
     }
 
     /**
