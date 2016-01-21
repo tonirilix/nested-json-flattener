@@ -34,7 +34,7 @@ It's based on [csvwriter](https://www.npmjs.com/package/csvwriter) npm package i
 **If you need to flat a nested json string**
 
 ```
-use NestedJsonFlattener\Csvcreator;
+use NestedJsonFlattener\Flattener\Flattener\Flattener;
 $dataJson = '{
 	"name": "This is a name",
 	"nested": {
@@ -48,7 +48,7 @@ $dataJson = '{
 	}	
 }';
 
-$csvWriter = new Csvcreator();
+$csvWriter = new Flattener();
 $csvWriter->setJsonData($dataJson);
 $flat = $csvWriter->getFlatData();
 print_r($flat);
@@ -58,7 +58,7 @@ print_r($flat);
 **If you need to flat a nested array**
 
 ```
-use NestedJsonFlattener\Csvcreator;
+use NestedJsonFlattener\Flattener\Flattener;
 $data = [
 	'name' => 'This is a name', 
 	'nested' => [
@@ -72,7 +72,7 @@ $data = [
 	]
 ];
 
-$csvWriter = new Csvcreator();
+$csvWriter = new Flattener();
 $csvWriter->setArrayData($data);
 $flat = $csvWriter->getFlatData();
 print_r($flat);
@@ -82,7 +82,7 @@ print_r($flat);
 Read [JsonPath](http://goessner.net/articles/JsonPath/) documentation from Stefan Goessner to learn how to create paths.
 
 ```
-use NestedJsonFlattener\Csvcreator;
+use NestedJsonFlattener\Flattener\Flattener;
 $data = [
 	'name' => 'This is a name', 
 	'nested' => [
@@ -98,7 +98,7 @@ $data = [
 // This is a path based on JsonPath implementation
 $options = ['path'=>'$.nested'];
 
-$csvWriter = new Csvcreator($options);
+$csvWriter = new Flattener($options);
 $csvWriter->setArrayData($data);
 $flat = $csvWriter->getFlatData();
 print_r($flat);
@@ -107,7 +107,7 @@ print_r($flat);
 **If you need to write a csv file**
 
 ```
-use NestedJsonFlattener\Csvcreator;
+use NestedJsonFlattener\Flattener\Flattener;
 $data = [
 	'name' => 'This is a name', 
 	'nested' => [
@@ -120,7 +120,7 @@ $data = [
 		'primitivesCollection'=> [123, 456, 789]
 	]
 ];
-$csvWriter = new Csvcreator();
+$csvWriter = new Flattener();
 $csvWriter->setArrayData($data);
 $csvWriter->writeCsv();
 
