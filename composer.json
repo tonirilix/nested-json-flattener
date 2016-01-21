@@ -1,6 +1,6 @@
 {
     "name": "tonirilix/nested-json-flattener",
-    "description": "A package to create cvs files from nested json objects",
+    "description": "A php package to flatten nested json objects and nested arrays. It also allows you to create csv files from the flattened data.",
     "keywords": ["json", "nested json", "convert json to csv", "csv", "csv writer"],
     "license": "MIT",
     "authors": [
