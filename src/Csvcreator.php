@@ -43,20 +43,20 @@ class Csvcreator {
      * Stores the data converted to object wether was passed as object or json string
      * @var type 
      */
-    private $_data;
+    private $data;
 
     /**
      * TODO: This is going to be the configuration. WIP
      * @var type 
      */
-    private $_options;
+    private $options;
 
     /**
      * A simple constructor
      */
     public function __construct($options = []) {
-        $this->_data = [];
-        $this->_options = $options;
+        $this->data = [];
+        $this->options = $options;
     }
 
     /**
@@ -66,8 +66,8 @@ class Csvcreator {
     public function setJsonData($json = '{}') {
 
         $selectedNode = json_decode($json, true);
-        $selectedNode = $this->_getPath($selectedNode);
-        $this->_data = $this->_arrayToObject($selectedNode);
+        $selectedNode = $this->getPath($selectedNode);
+        $this->data = $this->arrayToObject($selectedNode);
     }
 
     /**
@@ -78,16 +78,16 @@ class Csvcreator {
 
         $selectedNode = $array;
 
-        $selectedNode = $this->_getPath($selectedNode);
+        $selectedNode = $this->getPath($selectedNode);
 
-        $this->_data = $this->_arrayToObject($selectedNode);
+        $this->data = $this->arrayToObject($selectedNode);
     }
 
-    private function _getPath($data) {
+    private function getPath($data) {
         $selectedNode = $data;
-        if (!empty($this->_options) && isset($this->_options['path'])) {
+        if (!empty($this->options) && isset($this->options['path'])) {
             $store = new JsonStore($data);
-            $path = $this->_options['path'];
+            $path = $this->options['path'];
             // Returns an array with all categories from books which have an isbn attribute
             $selectedNode = $store->get($path);
         }
@@ -113,15 +113,15 @@ class Csvcreator {
         $result = [];
 
         // Checks wether data is an array or not
-        if (!is_array($this->_data)) {
+        if (!is_array($this->data)) {
             // If it's not we convert it to array
-            $this->_data = [$this->_data];
+            $this->data = [$this->data];
         }
 
         // Loops the array 
-        foreach ($this->_data as $data) {
+        foreach ($this->data as $data) {
             // Flats passed array of data
-            $result[] = $this->flatten($data, [], $this->_options);
+            $result[] = $this->flatten($data, [], $this->options);
         }
 
         // Returns
@@ -133,17 +133,17 @@ class Csvcreator {
      * @param string $name the name of the file. Default: "file_" . rand()
      */
     public function writeCsv($name = '') {
-        $_name = !empty($name) ? $name : "file_" . rand();
+        $name_ = !empty($name) ? $name : "file_" . rand();
         // Setting data
-        $_data = $this->getFlatData();
+        $data_ = $this->getFlatData();
 
-        $csvFormat = $this->_arrayToCsv($_data);
-        $this->_writeCsv($csvFormat, $_name);
+        $csvFormat = $this->arrayToCsv($data_);
+        $this->writeCsvToFile($csvFormat, $name_);
     }
 
-    private function _arrayToCsv($data) {
+    private function arrayToCsv($data) {
 
-        $dataNormalized = $this->_normalizeKeys($data);
+        $dataNormalized = $this->normalizeKeys($data);
 
         $rows[0] = array_keys($dataNormalized[0]);
 
@@ -154,15 +154,15 @@ class Csvcreator {
         return $rows;
     }
 
-    private function _writeCsv($data, $name) {
-        $fp = fopen($name . '.csv', 'w');
+    private function writeCsvToFile($data, $name) {
+        $file = fopen($name . '.csv', 'w');
         foreach ($data as $line) {
-            fputcsv($fp, $line, ',');
+            fputcsv($file, $line, ',');
         }
-        fclose($fp);
+        fclose($file);
     }
 
-    private function _normalizeKeys($param) {
+    private function normalizeKeys($param) {
         $keys = array();
         foreach (new RecursiveIteratorIterator(new RecursiveArrayIterator($param)) as $key => $val) {
             $keys[$key] = '';
@@ -182,12 +182,12 @@ class Csvcreator {
      * @param array $arr
      * @return object
      */
-    private function _arrayToObject(array $arr) {
+    private function arrayToObject(array $arr) {
         $flat = array_keys($arr) === range(0, count($arr) - 1);
         $out = $flat ? [] : new stdClass();
 
         foreach ($arr as $key => $value) {
-            $temp = is_array($value) ? $this->_arrayToObject($value) : $value;
+            $temp = is_array($value) ? $this->arrayToObject($value) : $value;
 
             if ($flat) {
                 $out[] = $temp;
@@ -227,8 +227,8 @@ class Csvcreator {
 
         $result = array();
 
-        $data = get_object_vars($data);
-        foreach ($data as $key => $value) {
+        $data_ = get_object_vars($data);
+        foreach ($data_ as $key => $value) {
             $currentPath = array_merge($path, array($key));
             $flat = $this->flatten($value, $currentPath, $options);
             $result = array_merge($result, $flat);
