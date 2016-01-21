@@ -121,7 +121,7 @@ class Csvcreator {
         // Loops the array 
         foreach ($this->data as $data) {
             // Flats passed array of data
-            $result[] = $this->flatten($data, [], $this->options);
+            $result[] = $this->flatten($data, []);
         }
 
         // Returns
@@ -202,64 +202,63 @@ class Csvcreator {
     /**
      * Flats a nested array
      * @param array $data Array with data to be flattened
-     * @param array $path Options param, it's used by the recursive method to set the full key name
-     * @param array $options Not implemented yet
+     * @param array $path Options param, it's used by the recursive method to set the full key name     
      * @return array Flattened array
      */
-    private function flatten($data, array $path = array(), array $options = array()) {
+    private function flatten($data, array $path = array()) {
 
         // Check if the data is an object        
         if (is_object($data)) {
 
-            $flatObject = $this->flatObject($data, $path, $options);
+            $flatObject = $this->flatObject($data, $path);
             return $flatObject;
 
             // Check if the data is an array
         } elseif (is_array($data)) {
 
-            $flatArray = $this->flatArray($data, $path, $options);
+            $flatArray = $this->flatArray($data, $path);
             return $flatArray;
         }
 
         // If the data isn't an object or an array is a value
-        $flatValue = $this->addValue($data, $path, $options);
+        $flatValue = $this->addValue($data, $path);
         return $flatValue;
     }
 
-    private function flatObject($data, array $path = array(), array $options = array()) {
+    private function flatObject($data, array $path = array()) {
 
 
         $dataModified = get_object_vars($data);
 
-        $flatArrayHelper = $this->flatArrayHelper($dataModified, $path, $options);
+        $flatArrayHelper = $this->flatArrayHelper($dataModified, $path);
         return $flatArrayHelper;
     }
 
-    private function flatArray($data, array $path = array(), array $options = array()) {
+    private function flatArray($data, array $path = array()) {
 
         if (count($data) > 0 && !is_object($data[0]) && !is_array($data[0])) {
-            $flatPrimitives = $this->flatten(join(",", $data), $path, $options);
+            $flatPrimitives = $this->flatten(join(",", $data), $path);
             return $flatPrimitives;
         }
 
 
-        $flatArrayHelper = $this->flatArrayHelper($data, $path, $options);
+        $flatArrayHelper = $this->flatArrayHelper($data, $path);
         return $flatArrayHelper;
     }
 
-    private function flatArrayHelper($data, $path, $options) {
+    private function flatArrayHelper($data, $path) {
         $result = array();
 
         foreach ($data as $key => $value) {
             $currentPath = array_merge($path, array($key));
-            $flat = $this->flatten($value, $currentPath, $options);
+            $flat = $this->flatten($value, $currentPath);
             $result = array_merge($result, $flat);
         }
 
         return $result;
     }
 
-    private function addValue($data, array $path = array(), array $options = array()) {
+    private function addValue($data, array $path = array()) {
         $result = array();
 
         $pathName = join('.', $path);
