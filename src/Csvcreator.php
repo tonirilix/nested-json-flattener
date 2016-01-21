@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-namespace NestedJsonToCsv;
+namespace NestedJsonFlattener;
 
 use Exception;
 use RecursiveArrayIterator;
