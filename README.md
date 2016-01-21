@@ -38,7 +38,7 @@ It's based on [csvwriter](https://www.npmjs.com/package/csvwriter) npm package i
 **If you need to flat a nested json string**
 
 ```
-use NestedJsonFlattener\Flattener\Flattener\Flattener;
+use NestedJsonFlattener\Flattener\Flattener;
 $dataJson = '{
 	"name": "This is a name",
 	"nested": {

@@ -46,10 +46,11 @@ $dataJson = '{
 $data = ['name' => 'scala', 'repo' => ['type'=>'git', 'url'=>'XD'], "collectionPrimitives"=>[1234,2134,55]];
 $options = ['path_'=>'$.nested'];
 
-$csvWriter = new Flattener($options);
-$csvWriter->setJsonData($dataJson); 
+$flattener = new Flattener($options);
+$flattener->setJsonData($dataJson); 
 //$csvWriter->setOptions();
 //$csvWriter->setArrayData($data);
-$flat = $csvWriter->getFlatData();
+$flat = $flattener->getFlatData();
 print_r($flat);
-$csvWriter->writeCsv();
+//$csvWriter->writeCsv();
+
