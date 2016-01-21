@@ -1,5 +1,5 @@
 # NestedJsonFlattener
-A php package to create cvs files from nested json objects, json files and nested arrays.
+A php package to flatten nested json objects and nested arrays. It also allows you to create csv files from the flattened data.
 
 ## Features
 1. The package allows you to select a specific node of the json object or array and flat it. The selected node can be flattened whether is a object or collection.
