@@ -133,12 +133,12 @@ class Csvcreator {
      * @param string $name the name of the file. Default: "file_" . rand()
      */
     public function writeCsv($name = '') {
-        $name_ = !empty($name) ? $name : "file_" . rand();
+        $fileName = !empty($name) ? $name : "file_" . rand();
         // Setting data
-        $data_ = $this->getFlatData();
+        $dataFlattened = $this->getFlatData();
 
-        $csvFormat = $this->arrayToCsv($data_);
-        $this->writeCsvToFile($csvFormat, $name_);
+        $csvFormat = $this->arrayToCsv($dataFlattened);
+        $this->writeCsvToFile($csvFormat, $fileName);
     }
 
     private function arrayToCsv($data) {
@@ -229,9 +229,9 @@ class Csvcreator {
     private function flatObject($data, array $path = array(), array $options = array()) {
 
 
-        $data_ = get_object_vars($data);
+        $dataModified = get_object_vars($data);
 
-        $flatArrayHelper = $this->flatArrayHelper($data_, $path, $options);
+        $flatArrayHelper = $this->flatArrayHelper($dataModified, $path, $options);
         return $flatArrayHelper;
     }
 
