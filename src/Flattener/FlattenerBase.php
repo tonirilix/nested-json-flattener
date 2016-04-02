@@ -95,7 +95,8 @@ abstract class FlattenerBase implements IFlattener {
 
     private function getDataPath($data) {
         $selectedNode = $data;
-        if (!empty($this->options) && isset($this->options['path'])) {
+
+        if ($this->validateDataPath()) {
             $store = new JsonStore($data);
             $path = $this->options['path'];
             // Returns an array with all categories from books which have an isbn attribute
@@ -111,7 +112,7 @@ abstract class FlattenerBase implements IFlattener {
     public function getOptions() {
         return $this->options;
     }
-    
+
     /**
      * 
      * @return Csvwriter
@@ -119,9 +120,36 @@ abstract class FlattenerBase implements IFlattener {
     protected function getCsvWriter() {
         return $this->csvWriter;
     }
-    
+
     protected function setData($data) {
         $this->data = $data;
+    }
+
+    /**
+     * OPTION METHODS     
+     */
+
+    /**
+     * Validates wether a path was already set
+     * @return type
+     */
+    protected function validateDataPath() {
+        $optionExists = !empty($this->options) && isset($this->options['path']);
+        return $optionExists;
+    }
+
+    protected function validateMaxDepth($path) {
+        $optionExists = !empty($this->options) && isset($this->options['maxDepth']);
+        $useMaxDepth = false;
+        if ($optionExists) {
+            $maxDepth = $this->options['maxDepth'];
+            $pathLength = count($path);
+            
+            if ($maxDepth >= 0 && $pathLength > ($maxDepth + 1)) {
+                $useMaxDepth = true;
+            }
+        }
+        return $useMaxDepth;
     }
 
 }
