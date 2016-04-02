@@ -44,7 +44,7 @@ $dataJson = '{
 }';
 
 $data = ['name' => 'scala', 'repo' => ['type'=>'git', 'url'=>'XD'], "collectionPrimitives"=>[1234,2134,55]];
-$options = ['path_'=>'$.nested'];
+$options = ['path_'=>'$.nested','maxDepth'=>0];
 
 $flattener = new Flattener($options);
 $flattener->setJsonData($dataJson); 
