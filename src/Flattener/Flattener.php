@@ -26,20 +26,19 @@
 
 namespace NestedJsonFlattener\Flattener;
 
-
 /**
  * Cvswriter allows you to transform nested json data into a flat csv
  *
  * @author tonirilix
  */
-class Flattener extends FlattenerBase{    
+class Flattener extends FlattenerBase {
 
     /**
      * A simple constructor
      */
     public function __construct($options = []) {
         parent::__construct($options);
-    }            
+    }
 
     /**
      * Resturns a flatted array
@@ -86,6 +85,10 @@ class Flattener extends FlattenerBase{
      */
     private function flatten($data, array $path = array()) {
 
+        if ($this->validateMaxDepth($path)) {            
+            return array();
+        }
+
         // Check if the data is an object        
         if (is_object($data)) {
 
@@ -131,7 +134,7 @@ class Flattener extends FlattenerBase{
         foreach ($data as $key => $value) {
             $currentPath = array_merge($path, array($key));
             $flat = $this->flatten($value, $currentPath);
-            $result = array_merge($result, $flat);
+            $result = is_array($flat) ? array_merge($result, $flat) : $result;
         }
 
         return $result;
