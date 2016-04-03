@@ -84,7 +84,10 @@ class Flattener extends FlattenerBase {
      * @return array Flattened array
      */
     private function flatten($data, array $path = array()) {
-
+        
+        /**
+         * If maxDepth is reached just return an empty array
+         */
         if ($this->validateMaxDepth($path)) {            
             return array();
         }

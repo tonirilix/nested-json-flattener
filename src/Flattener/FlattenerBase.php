@@ -130,14 +130,19 @@ abstract class FlattenerBase implements IFlattener {
      */
 
     /**
-     * Validates wether a path was already set
+     * Validates whether a path was already set
      * @return type
      */
     protected function validateDataPath() {
         $optionExists = !empty($this->options) && isset($this->options['path']);
         return $optionExists;
     }
-
+    
+    /**
+     * Validates whether maxDepth was reached
+     * @param array $path
+     * @return boolean
+     */
     protected function validateMaxDepth($path) {
         $optionExists = !empty($this->options) && isset($this->options['maxDepth']);
         $useMaxDepth = false;
