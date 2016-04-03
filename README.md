@@ -130,6 +130,6 @@ $flattener->writeCsv();
 
 ```
 ## TODO
-1. The package still needs to get configurations from params. 
+1. The package still needs to get configurations from params. [See milestone](https://github.com/tonirilix/nested-json-flattener/milestones/Configuration%20Options)
 2. Some of the params in mind are: whether take primitives arrays as one element or not (taken as one element by default)
-3. Add a way to create a configuration to tell the class how to handle internal collections. 
+3. Add a way to create a configuration to tell the class how to handle internal collections. [See milestone](https://github.com/tonirilix/nested-json-flattener/milestones/Internal%20collections%20handler)
