@@ -145,7 +145,7 @@ abstract class FlattenerBase implements IFlattener {
             $maxDepth = $this->options['maxDepth'];
             $pathLength = count($path);
             
-            if ($maxDepth >= 0 && $pathLength > ($maxDepth + 1)) {
+            if ($maxDepth >= 0 && $pathLength > ($maxDepth +1)) {
                 $useMaxDepth = true;
             }
         }

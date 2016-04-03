@@ -86,7 +86,7 @@ class Flattener extends FlattenerBase {
     private function flatten($data, array $path = array()) {
 
         if ($this->validateMaxDepth($path)) {            
-            return $data;
+            return array();
         }
 
         // Check if the data is an object        

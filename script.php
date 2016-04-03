@@ -37,14 +37,17 @@ $dataJson = '{
 		"location": "Earth",
 		"geo": {
 			"latitude": "1234567890",
-			"longitude": "0987654321"
+			"longitude": "0987654321",
+                        "moreNestedData": {
+                            "data": [1,2,3,4]
+                        }
 		},
 		"primitivesCollection": [123, 456, 789]
 	}
 }';
 
 $data = ['name' => 'scala', 'repo' => ['type'=>'git', 'url'=>'XD'], "collectionPrimitives"=>[1234,2134,55]];
-$options = ['path_'=>'$.nested','maxDepth'=>0];
+$options = ['path'=>'$.nested','maxDepth'=>2];
 
 $flattener = new Flattener($options);
 $flattener->setJsonData($dataJson); 
