@@ -120,15 +120,24 @@ class Flattener extends FlattenerBase {
     }
 
     private function flatArray($data, array $path = array()) {
+        $onlyPrimitives = TRUE;
 
-        if (count($data) > 0 && !is_object($data[0]) && !is_array($data[0])) {
+        foreach($data as $item) {
+            if(is_object($item) || is_array($item)) {
+                $onlyPrimitives = FALSE;
+                break;
+            }
+        }
+
+        if($onlyPrimitives && count($data) > 0) {
             $flatPrimitives = $this->flatten(join(",", $data), $path);
             return $flatPrimitives;
         }
 
-
-        $flatArrayHelper = $this->flatArrayHelper($data, $path);
-        return $flatArrayHelper;
+        else {
+            $flatArrayHelper = $this->flatArrayHelper($data, $path);
+            return $flatArrayHelper;
+        }
     }
 
     private function flatArrayHelper($data, $path) {
