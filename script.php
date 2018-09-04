@@ -42,7 +42,14 @@ $dataJson = '{
                             "data": [1,2,3,4]
                         }
 		},
-		"primitivesCollection": [123, 456, 789]
+		"primitivesCollection": [123, 456, 789],
+		"information_on_instrument": [
+			"With_ISIN",
+			{
+			  "instrument_identifier": "IT0001233417",
+			  "currency": "EUR"
+			}
+		  ]
 	}
 }';
 
