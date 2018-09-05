@@ -1,8 +1,6 @@
 # NestedJsonFlattener
 
-
-[![Code Climate](https://codeclimate.com/github/tonirilix/nested-json-flattener/badges/gpa.svg)] (https://codeclimate.com/github/tonirilix/nested-json-flattener)
-[![Build Status](https://travis-ci.org/tonirilix/nested-json-flattener.svg?branch=master)](https://travis-ci.org/tonirilix/nested-json-flattener)
+[![Code Climate](https://codeclimate.com/github/tonirilix/nested-json-flattener/badges/gpa.svg)](https://codeclimate.com/github/tonirilix/nested-json-flattener) [![Build Status](https://travis-ci.org/tonirilix/nested-json-flattener.svg?branch=master)](https://travis-ci.org/tonirilix/nested-json-flattener)
 [![codecov](https://codecov.io/gh/tonirilix/nested-json-flattener/branch/master/graph/badge.svg)](https://codecov.io/gh/tonirilix/nested-json-flattener)
 [![Latest Stable Version](https://poser.pugx.org/tonirilix/nested-json-flattener/v/stable)](https://packagist.org/packages/tonirilix/nested-json-flattener) [![Total Downloads](https://poser.pugx.org/tonirilix/nested-json-flattener/downloads)](https://packagist.org/packages/tonirilix/nested-json-flattener) [![Latest Unstable Version](https://poser.pugx.org/tonirilix/nested-json-flattener/v/unstable)](https://packagist.org/packages/tonirilix/nested-json-flattener) [![License](https://poser.pugx.org/tonirilix/nested-json-flattener/license)](https://packagist.org/packages/tonirilix/nested-json-flattener)
 
