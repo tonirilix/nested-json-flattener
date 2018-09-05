@@ -13,8 +13,15 @@
         "psr-4": {
             "NestedJsonFlattener\\": "src/"
         }
+    },    
+    "scripts": {        
+        "test": "./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist"
     },
-    "require-dev": {
+    "require": {
         "peekmo/jsonpath": "dev-master"
+    },
+    "prefer-stable": true,
+    "require-dev": {
+        "phpunit/phpunit": "^6.5"
     }
 }
