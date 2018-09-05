@@ -15,7 +15,7 @@
         }
     },    
     "scripts": {        
-        "test": "./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist"
+        "test": "./vendor/bin/phpunit --configuration ./phpunit.xml.dist"
     },
     "require": {
         "peekmo/jsonpath": "dev-master"
