@@ -45,12 +45,10 @@ class Csvwriter {
      * @param string $name the name of the file. Default: "file_" . rand()
      * @param array The flattened data
      */
-    public function writeCsv($name = '', $dataFlattened) {
-        $fileName = !empty($name) ? $name : "file_" . rand();
+    public function writeCsv($name, $dataFlattened) {
         // Setting data        
-
         $csvFormat = $this->arrayToCsv($dataFlattened);
-        $this->writeCsvToFile($csvFormat, $fileName);
+        $this->writeCsvToFile($csvFormat, $name);
     }
 
     private function arrayToCsv($data) {
