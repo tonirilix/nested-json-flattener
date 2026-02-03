@@ -12,7 +12,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1']
+        include:
+          - php-version: '7.4'
+            coverage: '0'
+          - php-version: '8.1'
+            coverage: '1'
 
     steps:
       - uses: actions/checkout@v4
@@ -28,8 +32,10 @@ jobs:
         run: composer install --no-interaction --no-progress
 
       - name: Run PHPUnit
+        env:
+          COVERAGE: ${{ matrix.coverage }}
         run: |
-          if [[ "${{ matrix.php-version }}" == '8.1' ]]; then
+          if [[ "$COVERAGE" == '1' ]]; then
             ./vendor/bin/phpunit --configuration travis.phpunit.xml.dist --coverage-clover=coverage.xml
           else
             ./vendor/bin/phpunit --configuration travis.phpunit.xml.dist
