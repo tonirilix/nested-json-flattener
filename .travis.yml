@@ -2,27 +2,47 @@
 # Validate this file here - http://lint.travis-ci.org/
 
 language: php
+dist: focal
 
 # Define the php versions against we want to test our code
 php:
-- 7.1
-- 7.2
+- '7.1'
+- '7.2'
+- '7.3'
+- '7.4'
+- '8.0'
+
+env:
+  global:
+  - COVERAGE=0
+
+jobs:
+  include:
+    - php: '8.1'
+      env: COVERAGE=1
 
 # Note: Code coverage requires php-xDebug extension enabled on CI server
 
 install:
-- travis_retry composer self-update
-- travis_retry composer install --no-interaction --no-suggest
+- travis_retry composer install --no-interaction --no-progress
 
 # Testing the app (see phpunit.xml) for configs, generating Code Coverage report
 script:
-- ./vendor/bin/phpunit --coverage-clover=coverage.xml
+- |
+  if [[ "$COVERAGE" == "1" ]]; then
+    ./vendor/bin/phpunit --configuration travis.phpunit.xml.dist --coverage-clover=coverage.xml
+  else
+    ./vendor/bin/phpunit --configuration travis.phpunit.xml.dist
+  fi
 
 #after_script:
 
 after_success:
 # Submit coverage report to https://codecov.io
-- bash <(curl -s https://codecov.io/bash)
+- |
+  if [[ "$COVERAGE" == "1" ]]; then
+    bash <(curl -s https://codecov.io/bash)
+  fi
 
 #after_failure:
 

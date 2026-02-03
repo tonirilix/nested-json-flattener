@@ -1,0 +1,36 @@
+name: Tests
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: xdebug
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: Run PHPUnit
+        run: |
+          if [[ "${{ matrix.php-version }}" == '8.1' ]]; then
+            ./vendor/bin/phpunit --configuration travis.phpunit.xml.dist --coverage-clover=coverage.xml
+          else
+            ./vendor/bin/phpunit --configuration travis.phpunit.xml.dist
+          fi
