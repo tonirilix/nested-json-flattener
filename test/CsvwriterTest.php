@@ -43,4 +43,30 @@ final class CsvwriterTest extends TestCase
             }
         }
     }
+
+    public function testWriteCsvAllowsOmittingFileName(): void
+    {
+        $writer = new Csvwriter();
+        $data = [
+            ['person.name' => 'Jane Doe'],
+        ];
+
+        $originalCwd = getcwd();
+        $tempDir = sys_get_temp_dir() . '/csvwriter_' . uniqid('', true);
+        self::assertTrue(mkdir($tempDir), 'Failed to create temporary directory');
+
+        chdir($tempDir);
+
+        try {
+            $writer->writeCsv('', $data);
+            $generatedFiles = glob('file_*.csv');
+
+            self::assertIsArray($generatedFiles);
+            self::assertNotEmpty($generatedFiles, 'Expected Csvwriter to generate a default file name');
+        } finally {
+            chdir($originalCwd);
+            array_map('unlink', glob($tempDir . '/*'));
+            rmdir($tempDir);
+        }
+    }
 }
