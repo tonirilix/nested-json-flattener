@@ -3,4 +3,4 @@
 /nbproject/
 
 # Generated files
-composer.lock
+.phpunit.result.cache

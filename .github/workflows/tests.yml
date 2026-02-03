@@ -1,0 +1,51 @@
+name: Tests
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php-version: '7.4'
+            coverage: '0'
+          - php-version: '8.1'
+            coverage: '1'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: xdebug
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: Run PHPUnit
+        env:
+          COVERAGE: ${{ matrix.coverage }}
+        run: |
+          if [[ "$COVERAGE" == '1' ]]; then
+            ./vendor/bin/phpunit --configuration travis.phpunit.xml.dist --coverage-clover=coverage.xml
+          else
+            ./vendor/bin/phpunit --configuration travis.phpunit.xml.dist
+          fi
+
+      - name: Upload coverage to Codecov
+        if: matrix.coverage == '1'
+        uses: codecov/codecov-action@v3
+        with:
+          files: coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: php81
+          fail_ci_if_error: true

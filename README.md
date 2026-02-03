@@ -1,6 +1,6 @@
 # NestedJsonFlattener
 
-[![Code Climate](https://codeclimate.com/github/tonirilix/nested-json-flattener/badges/gpa.svg)](https://codeclimate.com/github/tonirilix/nested-json-flattener) [![Build Status](https://travis-ci.org/tonirilix/nested-json-flattener.svg?branch=master)](https://travis-ci.org/tonirilix/nested-json-flattener)
+[![Code Climate](https://codeclimate.com/github/tonirilix/nested-json-flattener/badges/gpa.svg)](https://codeclimate.com/github/tonirilix/nested-json-flattener) [![Build Status](https://travis-ci.org/tonirilix/nested-json-flattener.svg?branch=master)](https://travis-ci.org/tonirilix/nested-json-flattener) [![GitHub Actions](https://github.com/tonirilix/nested-json-flattener/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/tonirilix/nested-json-flattener/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/tonirilix/nested-json-flattener/branch/master/graph/badge.svg)](https://codecov.io/gh/tonirilix/nested-json-flattener)
 [![Latest Stable Version](https://poser.pugx.org/tonirilix/nested-json-flattener/v/stable)](https://packagist.org/packages/tonirilix/nested-json-flattener) [![Total Downloads](https://poser.pugx.org/tonirilix/nested-json-flattener/downloads)](https://packagist.org/packages/tonirilix/nested-json-flattener) [![Latest Unstable Version](https://poser.pugx.org/tonirilix/nested-json-flattener/v/unstable)](https://packagist.org/packages/tonirilix/nested-json-flattener) [![License](https://poser.pugx.org/tonirilix/nested-json-flattener/license)](https://packagist.org/packages/tonirilix/nested-json-flattener)
 
@@ -130,6 +130,27 @@ $flattener->setArrayData($data);
 $flattener->writeCsv();
 
 ```
+
+## Local development
+
+### Requirements
+- PHP 7.1+ (tested up to PHP 8.1)
+- [Composer](https://getcomposer.org/)
+
+### Install dependencies
+
+```
+composer install
+```
+
+### Run the unit tests
+
+```
+composer test
+```
+
+Running the suite on PHP 8.x currently surfaces a few deprecation warnings from the legacy CSV writer implementation. They are harmless and documented here until the runtime is modernized.
+
 ## TODO
 1. The package still needs to get configurations from params. [See milestone](https://github.com/tonirilix/nested-json-flattener/milestones/Configuration%20Options)
 2. Some of the params in mind are: whether take primitives arrays as one element or not (taken as one element by default)
