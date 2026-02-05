@@ -69,4 +69,12 @@ final class CsvwriterTest extends TestCase
             rmdir($tempDir);
         }
     }
+
+    public function testWriteCsvRequiresFlattenedData(): void
+    {
+        $writer = new Csvwriter();
+
+        $this->expectException(InvalidArgumentException::class);
+        $writer->writeCsv('custom');
+    }
 }
