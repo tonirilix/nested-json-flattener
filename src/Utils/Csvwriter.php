@@ -47,7 +47,7 @@ class Csvwriter {
      */
     public function writeCsv($name = '', $dataFlattened = []) {
         if (empty($dataFlattened)) {
-            throw new InvalidArgumentException('Flattened data is required');
+            throw new \InvalidArgumentException('Flattened data is required');
         }
         $fileName = !empty($name) ? $name : "file_" . rand();
         // Setting data        
