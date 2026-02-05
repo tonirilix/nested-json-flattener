@@ -45,7 +45,10 @@ class Csvwriter {
      * @param string $name the name of the file. Default: "file_" . rand()
      * @param array The flattened data
      */
-    public function writeCsv($name = '', $dataFlattened) {
+    public function writeCsv($name = '', $dataFlattened = []) {
+        if (empty($dataFlattened)) {
+            throw new InvalidArgumentException('Flattened data is required');
+        }
         $fileName = !empty($name) ? $name : "file_" . rand();
         // Setting data        
 
